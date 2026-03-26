@@ -1,0 +1,45 @@
+{
+  "cti_system": {
+    "name": "Cyber Threat Intelligence Platform",
+    "version": "1.0.0",
+    "description": "Sistema global de Threat Intelligence com análise via Ollama e alertas Discord"
+  },
+  "ollama": {
+    "enabled": true,
+    "url": "http://localhost:11434",
+    "model": "mistral",
+    "fallback_to_keywords": true,
+    "timeout": 60
+  },
+  "discord": {
+    "enabled": true,
+    "webhook_url": "https://discordapp.com/api/webhooks/1486813240704106680/GJgm8KhplH32MYy2kVjbB0qVEH67uxZc6d3gFQuKFfAiuP3ytgh-36TlmGArCADMOCO7",
+    "send_test_alert": false
+  },
+  "collector": {
+    "timeout": 10,
+    "max_retries": 3,
+    "batch_size": 20,
+    "sources_file": "data/sources.json"
+  },
+  "scheduler": {
+    "interval_hours": 1,
+    "run_on_startup": true
+  },
+  "logging": {
+    "level": "INFO",
+    "log_file": "logs/cti.log",
+    "max_size_mb": 100,
+    "backup_count": 5
+  },
+  "storage": {
+    "results_dir": "data/results",
+    "format": "json"
+  },
+  "alert_rules": {
+    "alert_on_critical_severity": true,
+    "alert_on_financial_sector": true,
+    "alert_on_critical_infrastructure": true,
+    "min_severity": "alta"
+  }
+}

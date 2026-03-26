@@ -1,0 +1,122 @@
+[
+  {
+    "name": "SANS Internet Storm Center",
+    "url": "https://isc.sans.edu/rssfeed.xml",
+    "type": "rss",
+    "category": "general",
+    "enabled": true,
+    "description": "Centro de alerta de segurança da internet"
+  },
+  {
+    "name": "Bleeping Computer - Security News",
+    "url": "https://www.bleepingcomputer.com/feed/",
+    "type": "rss",
+    "category": "general",
+    "enabled": true,
+    "description": "Notícias de segurança cibernética"
+  },
+  {
+    "name": "Krebs on Security",
+    "url": "https://krebsonsecurity.com/feed/",
+    "type": "rss",
+    "category": "investigative",
+    "enabled": true,
+    "description": "Investigação em profundidade de ataques cibernéticos"
+  },
+  {
+    "name": "Dark Reading",
+    "url": "https://www.darkreading.com/services/feeds/rss/all.asp",
+    "type": "rss",
+    "category": "general",
+    "enabled": true,
+    "description": "Inteligência de segurança para empresas"
+  },
+  {
+    "name": "Malwarebytes Labs",
+    "url": "https://www.malwarebytes.com/feed/",
+    "type": "rss",
+    "category": "malware",
+    "enabled": true,
+    "description": "Pesquisa e análise de malware"
+  },
+  {
+    "name": "Checkpoint Research",
+    "url": "https://research.checkpoint.com/feed/",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Pesquisa de APTs e ameaças avançadas"
+  },
+  {
+    "name": "Mandiant Blog",
+    "url": "https://www.mandiant.com/resources/blog/rss.xml",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Análise de incidentes e APTs por Mandiant/Google"
+  },
+  {
+    "name": "CISA Alerts",
+    "url": "https://www.cisa.gov/news-events/cybersecurity-advisories/feed",
+    "type": "rss",
+    "category": "infrastructure",
+    "enabled": true,
+    "description": "Alertas de segurança de infraestrutura crítica (CISA)"
+  },
+  {
+    "name": "NVD CVE Feed",
+    "url": "https://services.nvd.nist.gov/rest/xml/cves/2.0/",
+    "type": "rss",
+    "category": "vulnerabilities",
+    "enabled": false,
+    "description": "Banco de dados de vulnerabilidades National Vulnerability Database"
+  },
+  {
+    "name": "ZDNet Security",
+    "url": "https://www.zdnet.com/topic/security/feed/",
+    "type": "rss",
+    "category": "general",
+    "enabled": true,
+    "description": "Notícias de segurança ZDNet"
+  },
+  {
+    "name": "Cisco Talos Intelligence",
+    "url": "https://feeds.talosintelligence.com/",
+    "type": "rss",
+    "category": "general",
+    "enabled": true,
+    "description": "Inteligência de ameaças Cisco Talos"
+  },
+  {
+    "name": "Recordedfuture Blog",
+    "url": "https://www.recordedfuture.com/feed/#/",
+    "type": "rss",
+    "category": "general",
+    "enabled": false,
+    "description": "Recordedfuture - Intelligence em tempo real"
+  },
+  {
+    "name": "Forum Infoguerre",
+    "url": "https://www.infoguerre.fr/feed",
+    "type": "rss",
+    "category": "geopolitical",
+    "enabled": true,
+    "description": "Análise brasileira de ciberguerra e inteligência"
+  },
+  {
+    "name": "SecurityTrails Blog",
+    "url": "https://blog.securitytrails.com/feed/",
+    "type": "rss",
+    "category": "infrastructure",
+    "enabled": true,
+    "description": "Análise de infraestrutura e DNS"
+  },
+  {
+    "name": "Unit42 Palo Alto Networks",
+    "url": "https://unit42.paloaltonetworks.com/feed/",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Pesquisa de Unit42 - Palo Alto Networks"
+  }
+]

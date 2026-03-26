@@ -1,0 +1,340 @@
+# ============================================================================
+# CTI System - Python Project .gitignore
+# Melhores práticas de segurança e limpeza
+# ============================================================================
+
+# ============================================================================
+# 🔐 SEGURANÇA - Arquivos com dados sensíveis
+# ============================================================================
+
+# Variáveis de ambiente com credenciais
+.env
+.env.local
+.env.*.local
+env.txt
+environment.cfg
+
+# Configurações locais com webhook Discord/API keys
+config.local.json
+config.*.json
+!config.json          # Template mantendo versão exemplo
+
+# Arquivos de credenciais
+credentials.json
+secrets.json
+*.key
+*.pem
+private_key
+id_rsa
+id_ed25519
+
+# ============================================================================
+# 📁 DIRETÓRIOS PYTHON
+# ============================================================================
+
+# Ambientes virtuais
+venv/
+env/
+ENV/
+.venv/
+pipenv/
+pyenv/
+.python-version
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Poetry
+poetry.lock
+
+# Pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Setuptools
+setup.cfg
+
+# ============================================================================
+# 📊 DADOS E LOGS (Muito grandes/sensíveis)
+# ============================================================================
+
+# Logs
+logs/
+*.log
+*.log.*
+debug.log
+pip-log.txt
+
+# Dados de resultados (contêm informações sensíveis de ameaças reais)
+data/results/
+data/results/*.json
+data/results/*.csv
+
+# Cache de coletas
+data/cache/
+*.cache
+
+# Backups
+*.backup
+*.bak
+*.old
+*~
+
+# ============================================================================
+# 🛠️ IDEs E EDITORES
+# ============================================================================
+
+# VS Code
+.vscode/
+.vscode-test/
+.history/
+*.code-workspace
+launch.json
+settings.json
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Nano
+.nano_history
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# ============================================================================
+# 🖥️ SISTEMA OPERACIONAL
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+thumbs.db
+Thumbs.db
+*.lnk
+$RECYCLE.BIN/
+Desktop.ini
+
+# Linux
+.directory
+*.swp
+*.swo
+*~
+
+# ============================================================================
+# 📦 DEPENDÊNCIAS E BUILD
+# ============================================================================
+
+# Node (se usar ferramentas frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Ruby (se usar)
+Gemfile.lock
+
+# ============================================================================
+# 🧪 TESTES E COBERTURA
+# ============================================================================
+
+# Pytest
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.cover
+.hypothesis/
+
+# Coverage reports
+coverage.xml
+*.cover
+
+# ============================================================================
+# 💾 BANCOS DE DADOS (Se adicionar)
+# ============================================================================
+
+*.db
+*.sqlite
+*.sqlite3
+*.orig
+*.sql
+
+# ============================================================================
+# 🐳 DOCKER E CONTAINER (Se usar)
+# ============================================================================
+
+# Local docker volume
+docker-compose.override.yml
+
+# ============================================================================
+# 📊 ARQUIVOS TEMPORÁRIOS
+# ============================================================================
+
+# Temp files
+tmp/
+temp/
+*.tmp
+*.temp
+*.swp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Arquivos de teste/debug
+test_output.json
+debug_output.json
+test.py
+debug.py
+
+# ============================================================================
+# 🚀 DEPLOYMENT E PRODUÇÃO
+# ============================================================================
+
+# Arquivos de certificado/SSL
+*.cert
+*.crt
+.ssl/
+
+# Variáveis de produção
+.env.production
+.env.staging
+
+# Arquivos de deployment
+deploy/
+*.tar
+*.tar.gz
+*.zip
+
+# ============================================================================
+# 🔄 GERENCIAMENTO DE VERSÃO
+# ============================================================================
+
+# Merge conflicts
+*.orig
+*.rej
+
+# Git específico
+.git/
+.gitmodules
+
+# ============================================================================
+# 📄 ARQUIVOS DE COMPILAÇÃO E BUILD
+# ============================================================================
+
+*.o
+*.a
+*.dylib
+*.dll
+*.exe
+*.out
+
+# ============================================================================
+# 🎯 ESPECÍFICOS DO CTI SYSTEM
+# ============================================================================
+
+# Arquivo de exemplo com dados reais (se não quer versionado)
+data/exemplo_output.json        # Descomente se tiver dados sensíveis
+
+# Diretório de backups
+backups/
+
+# Arquivos temporários do scheduler
+.schedule_state
+
+# PID files
+*.pid
+
+# Socket files
+*.sock
+
+# ============================================================================
+# ✅ EXCEÇÕES - O que MANTER no repositório
+# ============================================================================
+
+# Manter templates de configuração
+!.env.example
+!config.json
+!requirements.txt
+!setup.sh
+
+# Manter diretórios vazios com .gitkeep
+!data/.gitkeep
+!logs/.gitkeep
+!data/results/.gitkeep
+
+# Manter arquivos importantes
+!README.md
+!GUIA_RAPIDO.md
+!TECNICO.md
+!DISCORD_SETUP.md
+!SYSTEMD_SETUP.md
+!EXTENSOES.py
+!START_HERE.txt
+!CHECKLIST.txt
+
+# ============================================================================
+# 📋 NOTAS:
+# ============================================================================
+
+# 1. Sempre use .env.example como template, NUNCA versione .env real
+# 2. Não faça commit de dados/results com informações reais de ameaças
+# 3. Não versione logs (podem ter dados sensíveis)
+# 4. Sempre use git credentials helper para evitar guardar passwords
+# 5. Para secrets, use gerenciadores: AWS Secrets, HashiCorp Vault, etc
+# 6. Configure git hooks para evitar commits acidentais:
+#    git config core.hooksPath .git-hooks

@@ -1,0 +1,252 @@
+[
+  {
+    "id": "20240326_001",
+    "timestamp": "2024-03-26T15:30:00.123456",
+    "source": {
+      "name": "Bleeping Computer",
+      "link": "https://www.bleepingcomputer.com/news/security/apt-28-targets-brazilian-banks/",
+      "title": "APT-28 Launches Targeted Campaign Against Brazilian Financial Sector"
+    },
+    "threat_info": {
+      "apt_groups": [
+        "APT-28",
+        "Fancy Bear",
+        "Sofacy"
+      ],
+      "malware_names": [
+        "TrickBot",
+        "IcedID",
+        "Remcos"
+      ],
+      "affected_countries": [
+        "Brasil",
+        "Estados Unidos",
+        "Alemanha"
+      ],
+      "affected_sectors": [
+        "Financeiro",
+        "Governo"
+      ],
+      "severity": "crítica",
+      "technical_description": "APT-28 conduziu uma campanha de phishing sofisticada direcionada a instituições financeiras brasileiras. Os atacantes utilizaram domínios fakes imitando portais de bancos legítimos para roubar credenciais de acesso. Os emails contínham anexos Office macros-habilitados que, quando abertos, executam downloader silencioso.",
+      "attack_flow": "1. Envio de email de spearphishing com assunto fraudulento\n2. Anexo Office macro-habilitado executa PowerShell\n3. Download de TrickBot via Pastebin\n4. Instalação de backdoor para acesso remoto\n5. Exfiltração de dados bancários e cookies\n6. Lateral movement na rede corporativa",
+      "ttps": [
+        "T1566.002",
+        "T1192",
+        "T1059.001",
+        "T1203",
+        "T1110.001",
+        "T1056.001",
+        "T1041"
+      ],
+      "key_findings": "Esta é uma das maiores campanhas coordenadas contra o setor financeiro brasileiro nos últimos 6 meses. O grupo utilizou infraestrutura comprometida em VPS russas e chinesas. A taxa de sucesso de infecção foi ~15% baseado em telemetria."
+    },
+    "iocs": {
+      "ipv4": [
+        "185.220.101.45",
+        "195.154.52.187",
+        "91.198.174.192",
+        "203.0.113.42",
+        "10.0.0.100"
+      ],
+      "ipv6": [
+        "2001:db8::1",
+        "fd00::1"
+      ],
+      "domains": [
+        "banco-seguro.com.br",
+        "santander-brasil.net",
+        "itau-secure.ru",
+        "credito-facil.tk",
+        "malware-c2.xyz"
+      ],
+      "urls": [
+        "http://banco-seguro.com.br/login",
+        "https://malware-c2.xyz/api/beacon",
+        "http://pastebin.com/raw/abc123def",
+        "https://creditofacil.tk/download"
+      ],
+      "emails": [
+        "noreply@banco-seguro.com.br",
+        "admin@malware-c2.xyz",
+        "operator@grupo-apt28.ru"
+      ],
+      "hashes": {
+        "md5": [
+          "5d41402abc4b2a76b9719d911017c592",
+          "098f6bcd4621d373cade4e832627b4f6"
+        ],
+        "sha1": [
+          "356a192b7913b04c54574d18c28d46e6395428ab",
+          "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+        ],
+        "sha256": [
+          "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "2c26b46911185131006d3e7a4b6cfead2fb9735f50b2b713d5a17bce33a0e4b9"
+        ],
+        "sha512": [
+          "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"
+        ]
+      },
+      "files": [
+        "invoice_2024.docx",
+        "payment_receipt.exe",
+        "trickbot_loader.dll",
+        "icedid_config.bin"
+      ],
+      "registry_keys": [
+        "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Updater",
+        "HKCU\\Software\\Microsoft\\Crypto\\RSA\\S-1-5-21-xxx"
+      ],
+      "cves": [
+        "CVE-2024-1234",
+        "CVE-2024-5678",
+        "CVE-2023-9999"
+      ]
+    },
+    "classification": {
+      "is_high_severity": true,
+      "is_financial_related": true,
+      "is_critical_infrastructure": true,
+      "should_alert": true
+    },
+    "analysis_quality": "high",
+    "alert_sent": true,
+    "alert_sent_at": "2024-03-26T15:35:22.654321",
+    "discord_message_id": "1081234567890123456"
+  },
+  {
+    "id": "20240326_002",
+    "timestamp": "2024-03-26T15:40:00.654321",
+    "source": {
+      "name": "Checkpoint Research",
+      "link": "https://research.checkpoint.com/2024/lazarus-kubernetes-attack/",
+      "title": "Lazarus Group Exploits Kubernetes Vulnerabilities in Supply Chain Attack"
+    },
+    "threat_info": {
+      "apt_groups": [
+        "Lazarus Group",
+        "APT38",
+        "Hidden Cobra"
+      ],
+      "malware_names": [
+        "AppleJeus",
+        "MATA",
+        "KatyaPro"
+      ],
+      "affected_countries": [
+        "Coreia do Norte",
+        "Global"
+      ],
+      "affected_sectors": [
+        "Infraestrutura Crítica",
+        "Tecnologia",
+        "Financeiro"
+      ],
+      "severity": "crítica",
+      "technical_description": "Lazarus Group descoberto explorando CVE-2024-1234 em Kubernetes para comprometer containers de produção. Utilizou credential stuffing para acessar registros Docker privados. A atividade afetou mais de 50 empresas Fortune 500.",
+      "attack_flow": "1. Reconnaissance de infrastructure Kubernetes exposta\n2. Exploit de CVE-2024-1234 para RCE\n3. Deploy de backdoor em container\n4. Exfiltração de secrets armazenados em etcd\n5. Acesso lateral para nós do cluster\n6. Instalação de crypto-miner persistente",
+      "ttps": [
+        "T1046",
+        "T1190",
+        "T1047",
+        "T1552.007",
+        "T1133",
+        "T1078.001"
+      ],
+      "key_findings": "Este é um dos primeiros ataques coordenados contra Kubernetes em escala. Indicadores sugerem conexões com infraestrutura de crime cibernético conhecido."
+    },
+    "iocs": {
+      "ipv4": [
+        "203.0.113.100",
+        "198.51.100.50"
+      ],
+      "domains": [
+        "kubernetes-update.io",
+        "docker-registry.cloud"
+      ],
+      "urls": [
+        "https://kubernetes-update.io/payload"
+      ],
+      "hashes": {
+        "sha256": [
+          "baee0894b6a0b35d5b665f8cdbf3c65d3b8f9e7c7c5c8b5c8b5c8b5c8b5c8b5"
+        ]
+      },
+      "cves": [
+        "CVE-2024-1234"
+      ]
+    },
+    "classification": {
+      "is_high_severity": true,
+      "is_financial_related": false,
+      "is_critical_infrastructure": true,
+      "should_alert": true
+    },
+    "analysis_quality": "high",
+    "alert_sent": true,
+    "alert_sent_at": "2024-03-26T15:42:15.123456"
+  },
+  {
+    "id": "20240326_003",
+    "timestamp": "2024-03-26T15:50:00.789012",
+    "source": {
+      "name": "Krebs on Security",
+      "link": "https://krebsonsecurity.com/2024/ransomware-attack-healthcare/",
+      "title": "Ransomware Attack on Healthcare Provider Affects 2 Million Patients"
+    },
+    "threat_info": {
+      "apt_groups": [
+        "Cl0p Ransomware Gang",
+        "FIN11"
+      ],
+      "malware_names": [
+        "Cl0p",
+        "ScreenConnect"
+      ],
+      "affected_countries": [
+        "Brasil",
+        "EUA"
+      ],
+      "affected_sectors": [
+        "Saúde",
+        "Infraestrutura Crítica"
+      ],
+      "severity": "crítica",
+      "technical_description": "Grande rede hospitalar brasileira foi alvo de ataque ransomware Cl0p. Atacantes exploram vulnerabilidade 0-day em sistema de agendamento para acesso inicial. Posterior movimentação lateral para sistemas críticos.",
+      "attack_flow": "1. Exploit de 0-day em software de agendamento\n2. Instalação de webshell\n3. Enumeração de rede interna\n4. Lateral movement via AD\n5. Descoberta de compartilhamentos críticos\n6. Execução de ransomware em múltiplas máquinas\n7. Exfiltração de dados sensíveis (HIPAA)",
+      "ttps": [
+        "T1190",
+        "T1190",
+        "T1087",
+        "T1021.002",
+        "T1570",
+        "T1486"
+      ],
+      "key_findings": "Este ataque representa uma das maiores ameaças a saúde pública. O grupo está devolver exigir 5 milhões de dólares. Pacientes não conseguem acessar dados médicos."
+    },
+    "iocs": {
+      "ipv4": [
+        "45.142.182.100"
+      ],
+      "domains": [
+        "cl0p-ransom.onion",
+        "payment-portal.xyz"
+      ],
+      "hashes": {
+        "sha256": [
+          "deadbeefcafebabe123456789abcdef0123456789abcdef0123456789abcdef0"
+        ]
+      }
+    },
+    "classification": {
+      "is_high_severity": true,
+      "is_financial_related": false,
+      "is_critical_infrastructure": true,
+      "should_alert": true
+    },
+    "analysis_quality": "high",
+    "alert_sent": true,
+    "alert_sent_at": "2024-03-26T15:52:30.345678"
+  }
+]

@@ -1,0 +1,125 @@
+# ============================================================================
+# CTI System - Git Attributes
+# Configurações de normalização de linha, diff, merge
+# ============================================================================
+
+# ============================================================================
+# 🔄 NORMALIZAÇÃO DE LINE ENDINGS
+# ============================================================================
+
+# Auto normalizar line endings
+* text=auto
+
+# Python files
+*.py text eol=lf
+*.pyx text eol=lf
+
+# Bash/Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows batch
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.exe binary
+
+# ============================================================================
+# 📝 ARQUIVOS DE CONFIGURAÇÃO
+# ============================================================================
+
+# JSON
+*.json text diff=json
+
+# YAML
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Markdown
+*.md text diff=markdown
+*.markdown text diff=markdown
+
+# Config files
+*.conf text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
+*.toml text eol=lf
+
+# ============================================================================
+# 📦 ARQUIVOS BINÁRIOS
+# ============================================================================
+
+# Imagens
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+
+# Documentos
+*.pdf binary
+*.doc binary
+*.docx binary
+*.xls binary
+*.xlsx binary
+
+# Arquivos compactados
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.rar binary
+*.7z binary
+
+# ============================================================================
+# 🔐 SEGURANÇA
+# ============================================================================
+
+# Chaves privadas (nunca fazer diff)
+*.key binary
+*.pem binary
+*.crt binary
+*.cert binary
+id_rsa binary
+id_ed25519 binary
+
+# ============================================================================
+# 🧪 TESTES E COVERAGE
+# ============================================================================
+
+# Coverage
+.coverage binary
+*.cover binary
+
+# ============================================================================
+# 📊 DADOS
+# ============================================================================
+
+# CSV
+*.csv text diff=csv
+
+# XML
+*.xml text diff=xml
+
+# Logs (não fazer diff detalhado)
+*.log binary
+*.log.* binary
+
+# ============================================================================
+# 🎯 PRESERVAR LF (Unix) para scripts
+# ============================================================================
+
+# Git hooks
+.git/hooks/* text eol=lf
+
+# Makefile must use tabs
+Makefile text eol=lf
+makefile text eol=lf
+
+# ============================================================================
+# 🔧 CONFIGURAÇÕES DE MERGE
+# ============================================================================
+
+# Usar merge driver específico
+*.json merge=union
+requirements.txt merge=union
