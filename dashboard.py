@@ -379,7 +379,12 @@ if threats:
                 return True
             if any(q in w.lower() for w in ti.get("malware_names", [])):
                 return True
-            if any(q in w.lower() for w in ti.get("attack_flow", "").split()):
+            attack_flow = ti.get("attack_flow", "")
+            if isinstance(attack_flow, str):
+                words = attack_flow.split()
+            else:
+                words = attack_flow if isinstance(attack_flow, list) else []
+            if any(q in w.lower() for w in words):
                 return True
             return False
 
