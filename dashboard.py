@@ -21,8 +21,8 @@ from typing import List, Dict, Any
 import plotly.express as px
 import plotly.graph_objects as go
 from dotenv import load_dotenv
-from deduplicator import ThreatDeduplicator
-from db import save_threats_to_db, load_threats_from_db
+from src.cti.deduplicator import ThreatDeduplicator
+from src.cti.db import save_threats_to_db, load_threats_from_db
 
 # Configuração da página
 st.set_page_config(

@@ -23,13 +23,13 @@ from dotenv import load_dotenv
 import os
 
 # Importar módulos do projeto
-from collector import ThreatCollector
-from parser import ContentParser
-from ioc_extractor import IOCExtractor
-from intel_engine import IntelligenceEngine
-from notifier import DiscordNotifier
-from deduplicator import ThreatDeduplicator
-from db import save_threats_to_db
+from src.cti.collector import ThreatCollector
+from src.cti.parser import ContentParser
+from src.cti.ioc_extractor import IOCExtractor
+from src.cti.intel_engine import IntelligenceEngine
+from src.cti.notifier import DiscordNotifier
+from src.cti.deduplicator import ThreatDeduplicator
+from src.cti.db import save_threats_to_db
 
 
 class CTISystem:

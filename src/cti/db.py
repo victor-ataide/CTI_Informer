@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Dict, List, Any
 from dotenv import load_dotenv
 
-from deduplicator import ThreatDeduplicator
+from .deduplicator import ThreatDeduplicator
 
 # Carregar .env
 load_dotenv()
