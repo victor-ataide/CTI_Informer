@@ -36,6 +36,10 @@
     "results_dir": "data/results",
     "format": "json"
   },
+  "database": {
+    "engine": "postgresql",  
+    "sqlite_path": "data/cti_threats.db"
+  },
   "alert_rules": {
     "alert_on_critical_severity": true,
     "alert_on_financial_sector": true,

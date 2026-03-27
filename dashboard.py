@@ -16,9 +16,13 @@ import pandas as pd
 from datetime import datetime, timedelta
 import os
 import glob
+import hashlib
 from typing import List, Dict, Any
 import plotly.express as px
 import plotly.graph_objects as go
+from dotenv import load_dotenv
+from deduplicator import ThreatDeduplicator
+from db import save_threats_to_db, load_threats_from_db
 
 # Configuração da página
 st.set_page_config(
@@ -30,6 +34,9 @@ st.set_page_config(
 
 # Auto refresh padrão: 60 segundos
 refresh_count = st_autorefresh(interval=60_000, limit=None, key="dashboard_autorefresh")
+
+# Carregar variáveis de ambiente
+load_dotenv()
 
 # Título principal
 st.title("🚨 Sistema de Inteligência de Ameaças Cibernéticas")
@@ -43,16 +50,43 @@ def get_threat_title(threat: Dict[str, Any]) -> str:
         return "Sem título"
     return title
 
+
+def get_ioc_hash(iocs: Dict[str, Any]) -> str:
+    dedup = ThreatDeduplicator()
+    try:
+        return dedup._generate_ioc_hash(iocs)
+    except Exception:
+        merged = []
+        for kind in ["ipv4", "ipv6", "domains", "urls", "emails", "cves"]:
+            merged.extend(sorted(iocs.get(kind, [])))
+        hashes = iocs.get("hashes", {})
+        for hdict in [hashes.get("sha256", []), hashes.get("sha1", []), hashes.get("md5", [])]:
+            merged.extend(sorted(hdict))
+        return hashlib.sha256("|".join(merged).encode()).hexdigest()
+
+
+def remove_duplicate_threats(threat_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    seen = set()
+    unique = []
+    for threat in threat_list:
+        iocs = threat.get("iocs", {})
+        h = get_ioc_hash(iocs)
+        if h not in seen:
+            seen.add(h)
+            unique.append(threat)
+    return unique
+
+
 st.markdown("---")
 
 # Funções auxiliares
 def load_threats_data() -> List[Dict]:
-    """Carrega dados de ameaças do diretório results"""
+    """Carrega dados de ameaças do diretório results e sincroniza com banco SQLite"""
     results_dir = "data/results"
     threats = []
 
     if not os.path.exists(results_dir):
-        return threats
+        return []
 
     # Buscar todos os arquivos JSON de resultados
     json_files = glob.glob(os.path.join(results_dir, "*.json"))
@@ -68,6 +102,43 @@ def load_threats_data() -> List[Dict]:
         except Exception as e:
             st.warning(f"Erro ao carregar {file_path}: {e}")
 
+    # Remover ameaças duplicadas (por IoC)
+    threats = remove_duplicate_threats(threats)
+
+    # Persistir no banco de dados conforme config
+    db_config = {
+        "engine": "sqlite",
+        "sqlite_path": "data/cti_threats.db"
+    }
+
+    if os.path.exists("config.json"):
+        try:
+            with open("config.json", "r", encoding="utf-8") as f:
+                app_config = json.load(f)
+                if "database" in app_config:
+                    db_config = app_config["database"]
+        except Exception:
+            pass
+
+    # Adicionar credenciais do .env se PostgreSQL
+    if db_config.get("engine") == "postgresql":
+        db_config["postgresql"] = {
+            "host": os.getenv("POSTGRES_HOST", "localhost"),
+            "port": int(os.getenv("POSTGRES_PORT", 5432)),
+            "dbname": os.getenv("POSTGRES_DBNAME", "cti"),
+            "user": os.getenv("POSTGRES_USER", ""),
+            "password": os.getenv("POSTGRES_PASSWORD", "")
+        }
+
+    try:
+        save_threats_to_db(threats, db_config)
+        db_threats = load_threats_from_db(db_config)
+    except Exception as e:
+        st.warning(f"Falha ao salvar/carregar banco de dados: {e}")
+        db_threats = []
+
+    if db_threats:
+        return db_threats
     return threats
 
 def get_severity_color(severity: str) -> str:
@@ -252,6 +323,9 @@ if threats:
         default=[s for s in severities if s in ["crítica", "alta"]]
     )
 
+    search_query = st.sidebar.text_input("🔍 Buscar (texto, APT, malware)", value="")
+    diamond_mode = st.sidebar.checkbox("💎 Ativar modo Diamond Model", value=False)
+
     # Filtro de setores - com tratamento de erro
     all_sectors = set()
     for t in threats:
@@ -292,6 +366,24 @@ if threats:
                 continue
 
         filtered_threats.append(threat)
+
+    if search_query and filtered_threats:
+        q = search_query.strip().lower()
+        def match_search(threat: Dict[str, Any]) -> bool:
+            if q in get_threat_title(threat).lower():
+                return True
+            ti = threat.get("threat_info", {})
+            if q in (ti.get("technical_description", "") or "").lower():
+                return True
+            if any(q in w.lower() for w in ti.get("apt_groups", [])):
+                return True
+            if any(q in w.lower() for w in ti.get("malware_names", [])):
+                return True
+            if any(q in w.lower() for w in ti.get("attack_flow", "").split()):
+                return True
+            return False
+
+        filtered_threats = [t for t in filtered_threats if match_search(t)]
 
     # Botão de atualização
     if st.sidebar.button("🔄 Atualizar Dados"):
@@ -390,6 +482,26 @@ else:
 
     st.markdown("---")
 
+    # Países afetados (nova aba/visão)
+    st.subheader("🌍 Distribuição por País")
+    country_counts = {}
+    for threat in filtered_threats:
+        for country in threat.get("affected_countries", []):
+            if not country:
+                continue
+            country_counts[country] = country_counts.get(country, 0) + 1
+
+    if country_counts:
+        country_df = pd.DataFrame(
+            sorted(country_counts.items(), key=lambda x: x[1], reverse=True),
+            columns=["País", "Ocorrências"]
+        )
+        st.bar_chart(country_df.set_index("País"))
+    else:
+        st.info("Nenhum país detectado nas ameaças atuais.")
+
+    st.markdown("---")
+
     # Gráficos
     col1, col2 = st.columns(2)
 
@@ -440,6 +552,37 @@ else:
 
     st.markdown("---")
 
+    # Diamond model
+    if diamond_mode:
+        st.subheader("💎 Diamond Model - Visão de Ameaças")
+        diamond_items = []
+        for threat in filtered_threats:
+            ti = threat.get("threat_info", {})
+            adversary = ", ".join(ti.get("apt_groups", [])) or "Desconhecido"
+            capabilities = ", ".join(ti.get("malware_names", [])) or ", ".join(threat.get("iocs", {}).get("hashes", {}).get("sha256", [])[:3]) or "Desconhecido"
+            infrastructure_sources = []
+            infra_iocs = threat.get("iocs", {})
+            infrastructure_sources.extend(infra_iocs.get("domains", [])[:2])
+            infrastructure_sources.extend(infra_iocs.get("ipv4", [])[:2])
+            infrastructure_sources.extend(infra_iocs.get("urls", [])[:2])
+            infrastructure = ", ".join(infrastructure_sources) if infrastructure_sources else "Desconhecido"
+            victim = ", ".join(ti.get("affected_sectors", [])[:2]) or "Desconhecido"
+            diamond_items.append({
+                "Ameaça": get_threat_title(threat),
+                "Adversary": adversary,
+                "Infrastructure": infrastructure,
+                "Capability": capabilities,
+                "Victim": victim,
+                "Severidade": ti.get("severity", "desconhecida")
+            })
+
+        if diamond_items:
+            st.dataframe(pd.DataFrame(diamond_items), width='stretch')
+        else:
+            st.info("Nenhuma ameaça disponível para o modo Diamond.")
+
+        st.markdown("---")
+
     # Tabela de ameaças
     st.subheader("📋 Ameaças Recentes")
 
@@ -448,12 +591,14 @@ else:
         table_data = []
         for threat in filtered_threats[-20:]:  # Últimas 20
             threat_info = threat.get("threat_info", {})
+            countries = ", ".join(sorted(set(threat.get("affected_countries", []))))
             table_data.append({
-                "Data/Hora": format_timestamp(threat["timestamp"]),
+                "Data/Hora": format_timestamp(threat.get("timestamp", "")),
                 "Fonte": threat.get("source", {}).get("name", "Desconhecida"),
                 "Severidade": threat_info.get("severity", "desconhecida").upper(),
                 "APTs": ", ".join((threat_info.get("apt_groups") or [])[:2]),
-                "Setores": ", ".join((threat_info.get("affected_sectors") or [])[:3]),
+                "Malware": ", ".join((threat_info.get("malware_names") or [])[:2]),
+                "Países": countries or "N/A",
                 "Título": get_threat_title(threat)[:50] + "..." if len(get_threat_title(threat)) > 50 else get_threat_title(threat)
             })
 
@@ -497,6 +642,10 @@ else:
                 with col2:
                     st.markdown("**Fluxo de Ataque:**")
                     st.write(threat_info.get("attack_flow", "Não especificado"))
+
+                    st.markdown("**Países afetados:**")
+                    countries = sorted(set(threat.get("affected_countries", [])))
+                    st.write(", ".join(countries) if countries else "N/A")
 
                     st.markdown("**Classificação:**")
                     if classification.get("is_financial_related"):

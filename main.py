@@ -19,6 +19,8 @@ from datetime import datetime
 from pathlib import Path
 import schedule
 from typing import Optional
+from dotenv import load_dotenv
+import os
 
 # Importar módulos do projeto
 from collector import ThreatCollector
@@ -27,6 +29,7 @@ from ioc_extractor import IOCExtractor
 from intel_engine import IntelligenceEngine
 from notifier import DiscordNotifier
 from deduplicator import ThreatDeduplicator
+from db import save_threats_to_db
 
 
 class CTISystem:
@@ -50,6 +53,9 @@ class CTISystem:
         Args:
             config_file (str): Caminho do arquivo de configuração
         """
+        # Carregar variáveis de ambiente
+        load_dotenv()
+        
         self.config = self._load_config(config_file)
         self._setup_logging()
         
@@ -68,9 +74,9 @@ class CTISystem:
             ollama_url=self.config["ollama"]["url"],
             model=self.config["ollama"]["model"]
         )
-        self.notifier = DiscordNotifier(
-            webhook_url=self.config["discord"]["webhook_url"]
-        )
+        # Usar webhook do .env
+        webhook_url = os.getenv("DISCORD_WEBHOOK_URL", "")
+        self.notifier = DiscordNotifier(webhook_url=webhook_url)
         
         # Inicializar deduplicador de alertas
         self.deduplicator = ThreatDeduplicator(
@@ -345,6 +351,17 @@ class CTISystem:
             
         except Exception as e:
             logger.error(f"Erro ao salvar resultados: {str(e)}")
+
+        # Salvar também no banco de dados (SQLite/PostgreSQL)
+        try:
+            db_config = self.config.get("database", {
+                "engine": "sqlite",
+                "sqlite_path": "data/cti_threats.db"
+            })
+            saved_count = save_threats_to_db(enriched_threats, db_config)
+            logger.info(f"✅ {saved_count} ameaças gravadas no banco de dados")
+        except Exception as e:
+            logger.error(f"Erro ao salvar no banco de dados: {e}")
     
     def run_daemon(self) -> None:
         """Executa o sistema periodicamente (daemon)."""
