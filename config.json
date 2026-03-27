@@ -13,7 +13,7 @@
   },
   "discord": {
     "enabled": true,
-    "webhook_url": "https://discordapp.com/api/webhooks/1486813240704106680/GJgm8KhplH32MYy2kVjbB0qVEH67uxZc6d3gFQuKFfAiuP3ytgh-36TlmGArCADMOCO7",
+    "webhook_url": "SEU_WEBHOOK_DO_DISCORD",
     "send_test_alert": false
   },
   "collector": {
