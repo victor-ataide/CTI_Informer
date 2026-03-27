@@ -96,11 +96,34 @@ data/results/*.csv
 data/cache/
 *.cache
 
+# Cache de deduplicação (contém hashes de IoCs)
+data/.alert_cache.json
+
 # Backups
 *.backup
 *.bak
 *.old
 *~
+
+# ============================================================================
+# 🔐 SEGURANÇA CTI ESPECÍFICA
+# ============================================================================
+
+# Webhooks Discord/API keys em arquivos locais
+webhook_*.txt
+discord_webhook.txt
+api_keys.json
+
+# Arquivos de configuração com credenciais
+config.production.json
+config.staging.json
+config.dev.json
+
+# Chaves de API e tokens
+*.token
+*.secret
+api_key.txt
+discord_token.txt
 
 # ============================================================================
 # 🛠️ IDEs E EDITORES

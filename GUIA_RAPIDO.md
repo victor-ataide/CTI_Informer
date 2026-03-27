@@ -56,6 +56,17 @@ python main.py --daemon
 python main.py --test
 ```
 
+### 🎨 Dashboard Web (Visualização)
+```bash
+# Abrir dashboard interativo no navegador
+streamlit run dashboard.py
+
+# OU usar o script automático:
+./start_dashboard.sh
+
+# Acesso: http://localhost:8501
+```
+
 ---
 
 ## 📊 Oque acontece?
@@ -143,6 +154,7 @@ nano config.json
 ```
 CTI/
 ├── main.py              ← Execute isto
+├── dashboard.py         ← Dashboard web (streamlit)
 ├── collector.py         ← Coleta RSS
 ├── parser.py            ← Processa HTML
 ├── ioc_extractor.py     ← Extrai IPs, domínios, etc
@@ -196,6 +208,9 @@ ollama serve
 
 # Terminal 3:
 python main.py --daemon
+
+# Terminal 4 (opcional):
+./start_dashboard.sh
 ```
 
 ---

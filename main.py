@@ -26,6 +26,7 @@ from parser import ContentParser
 from ioc_extractor import IOCExtractor
 from intel_engine import IntelligenceEngine
 from notifier import DiscordNotifier
+from deduplicator import ThreatDeduplicator
 
 
 class CTISystem:
@@ -69,6 +70,12 @@ class CTISystem:
         )
         self.notifier = DiscordNotifier(
             webhook_url=self.config["discord"]["webhook_url"]
+        )
+        
+        # Inicializar deduplicador de alertas
+        self.deduplicator = ThreatDeduplicator(
+            cache_file="data/.alert_cache.json",
+            retention_days=7
         )
         
         # Criar diretórios se não existirem
@@ -164,10 +171,15 @@ class CTISystem:
             
             elapsed = time.time() - start_time
             
+            # Estatísticas do deduplicador
+            dedup_stats = self.deduplicator.get_stats()
+            
             logger.info("\n" + "="*60)
             logger.info(f"✅ Pipeline completado com sucesso em {elapsed:.2f}s")
             logger.info(f"   📊 Artigos processados: {len(parsed_articles)}")
-            logger.info(f"   🎯 Alertas enviados: {alerts_sent}")
+            logger.info(f"   🚨 Ameaças analisadas: {len(enriched_threats)}")
+            logger.info(f"   📤 Alertas enviados: {alerts_sent}")
+            logger.info(f"   💾 Ameaças no cache: {dedup_stats['total_cached']}")
             logger.info("="*60 + "\n")
             
         except Exception as e:
@@ -261,7 +273,7 @@ class CTISystem:
     
     def _alerting_phase(self, enriched_threats: list) -> int:
         """
-        Fase 4: Envio de alertas para Discord.
+        Fase 4: Envio de alertas para Discord (com deduplicação).
         
         Args:
             enriched_threats (list): Ameaças enriquecidas
@@ -275,10 +287,35 @@ class CTISystem:
             logger.warning("⚠️  Discord desabilitado na configuração")
             return 0
         
-        logger.info(f"Enviando alertas para Discord...")
-        alerts_sent = self.notifier.send_batch(enriched_threats)
+        logger.info(f"Verificando {len(enriched_threats)} ameaças para duplicatas...")
         
-        logger.info(f"✅ {alerts_sent} alertas enviados")
+        # Filtrar apenas ameaças novas (não duplicadas)
+        new_threats = []
+        for threat in enriched_threats:
+            if self.deduplicator.is_duplicate(threat):
+                logger.info(f"  ⊘ Duplicata: {threat['source'].get('title', 'N/A')[:50]}")
+            else:
+                new_threats.append(threat)
+        
+        if not new_threats:
+            logger.info("Nenhuma ameaça nova para alertar no Discord")
+            return 0
+        
+        logger.info(f"Enviando {len(new_threats)} alertas novos para Discord...")
+        alerts_sent = 0
+        
+        for threat in new_threats:
+            try:
+                if self.notifier.send_alert(threat):
+                    self.deduplicator.mark_as_alerted(threat)
+                    alerts_sent += 1
+            except Exception as e:
+                logger.error(f"Erro ao enviar alerta: {e}")
+        
+        # Limpar entradas antigas
+        cleaned = self.deduplicator.cleanup_old_entries()
+        
+        logger.info(f"✅ {alerts_sent} alertas enviados ({cleaned} entradas antigas removidas)")
         
         return alerts_sent
     

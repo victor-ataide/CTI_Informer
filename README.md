@@ -200,6 +200,8 @@ python main.py --config config_producao.json --daemon
 ```
 CTI/
 ├── main.py                 # Arquivo principal - orquestra tudo
+├── dashboard.py            # Dashboard web interativo (Streamlit)
+├── start_dashboard.sh      # Script para iniciar dashboard
 ├── collector.py            # Coleta de múltiplas fontes RSS
 ├── parser.py               # Processamento e normalização de conteúdo
 ├── ioc_extractor.py        # Extração de Indicadores de Comprometimento
@@ -210,8 +212,18 @@ CTI/
 ├── data/
 │   ├── sources.json        # Fontes de inteligência
 │   └── results/            # JSON com ameaças analisadas
-└── logs/
-    └── cti.log             # Arquivo de log
+├── logs/
+│   └── cti.log             # Arquivo de log
+├── DASHBOARD_README.md     # Documentação completa do dashboard
+├── README.md               # Esta documentação
+├── GUIA_RAPIDO.md          # Guia de 5 minutos
+├── TECNICO.md              # Documentação técnica detalhada
+├── DISCORD_SETUP.md        # Como configurar Discord
+├── SYSTEMD_SETUP.md        # Como rodar como serviço Linux
+├── EXTENSOES.py            # Exemplos de extensões
+├── START_HERE.txt          # Arquivo inicial
+├── CHECKLIST.txt           # Checklist de verificação
+└── setup.sh                # Script de instalação automatizada
 ```
 
 ---
@@ -384,11 +396,22 @@ pip install requests feedparser beautifulsoup4
 
 ## Melhorias Futuras 🚀
 
-### Dashboard Web
-```python
-# Dashboard em Streamlit para visualizar ameaças
+### Dashboard Web ✅ IMPLEMENTADO
+```bash
+# Dashboard interativo em Streamlit
+# Visualização completa de ameaças coletadas
 streamlit run dashboard.py
+
+# Acesso: http://localhost:8501
 ```
+
+**Funcionalidades do Dashboard:**
+- 📊 **Métricas em tempo real** (total, críticas, setores afetados)
+- 🔍 **Filtros avançados** por severidade, setor e período
+- 📈 **Gráficos interativos** (distribuição por severidade, setores afetados)
+- 📋 **Tabela de ameaças** com detalhes organizados
+- 🎯 **Visualização detalhada** de IoCs, TTPs e informações técnicas
+- 🔄 **Atualização automática** dos dados
 
 ### Integração com SIEM
 ```python

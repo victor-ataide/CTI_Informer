@@ -4,3 +4,6 @@ beautifulsoup4>=4.11.0
 ollama>=0.6.0
 python-dotenv>=1.0.0
 schedule>=1.1.0
+streamlit>=1.28.0
+streamlit-autorefresh>=0.0.2
+plotly>=5.15.0
