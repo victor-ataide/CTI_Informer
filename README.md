@@ -474,9 +474,8 @@ MIT License - Use livremente em projetos comerciais e pessoais
 
 ## Autores e Contato
 
-**Empresa/Autores**: Cyber Threat Intelligence Team
-**Email**: cti@empresa.com
-**Website**: https://cti-platform.com
+**Empresa/Autores**: Mang3ky0
+
 
 ---
 
