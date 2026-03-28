@@ -594,7 +594,7 @@ else:
     if filtered_threats:
         # Preparar dados para tabela
         table_data = []
-        for threat in filtered_threats[-20:]:  # Últimas 20
+        for threat in filtered_threats:  
             threat_info = threat.get("threat_info", {})
             countries = ", ".join(sorted(set(threat.get("affected_countries", []))))
             table_data.append({
