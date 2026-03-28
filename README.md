@@ -1,44 +1,165 @@
-# CTI System - Plataforma Global de Threat Intelligence 🔍
 
-## Visão Geral
+# CTI System - Plataforma Global de Threat Intelligence 🚨
 
-Um sistema completo e open-source de **Cyber Threat Intelligence (CTI)** que monitora ataques globais envolvendo **APTs**, **malware**, **infraestrutura crítica** e **setor financeiro**, enviando inteligência técnica formatada para Discord.
-
-### ✨ Características Principais
-
-- ✅ **Coleta de múltiplas fontes** RSS/blogs de segurança
-- ✅ **Análise com LLM local** (Ollama + Mistral/Llama3) - **sem APIs externas**
-- ✅ **Extração de IoCs**: IPs, domínios, URLs, emails, hashes, CVEs
-- ✅ **Mapeamento MITRE ATT&CK** de técnicas
-- ✅ **Classificação inteligente** de ameaças
-- ✅ **Alertas formatados para Discord** em estilo SOC
-- ✅ **Execução automática** a cada 1 hora
-- ✅ **Armazenamento em JSON** estruturado
-- ✅ **100% local** - sem dependências externas
+Sistema open-source de **Cyber Threat Intelligence (CTI)** para monitoramento de ameaças, análise com LLM local (Ollama), extração de IoCs e alertas automáticos para Discord.
 
 ---
 
-## Requisitos
+## Principais Recursos
 
-### Sistema
-- **Linux** (Ubuntu 20.04+ recomendado)
+- Coleta de múltiplas fontes (RSS/blogs)
+- Análise com LLM local (Ollama: Mistral/Llama3)
+- Extração de IoCs (IPs, domínios, URLs, hashes, CVEs)
+- Mapeamento MITRE ATT&CK
+- Alertas automáticos para Discord
+- Dashboard web interativo (Streamlit)
+- 100% local, sem dependências externas
+
+---
+
+## Instalação Rápida
+
+### 1. Pré-requisitos
+
 - **Python 3.8+**
-- **Ollama** (para análise com LLM)
-- **15GB de RAM** mínimo (recomendado: 32GB)
+- **Ollama** (para análise LLM)
+- **15GB RAM** (recomendado: 32GB)
+- **Git** (opcional, para clonar o repositório)
 
-### Software
+### 2. Baixar o Projeto
+
 ```bash
-# Instalar Ollama (https://ollama.ai)
-curl https://ollama.ai/install.sh | sh
+# Linux/macOS
+git clone <repo-url>
+cd CTI
 
-# Instalar Python3 e pip
-sudo apt-get update
-sudo apt-get install python3 python3-pip -y
-
-# Clonar ou baixar este projeto
+# Windows (Prompt de Comando ou PowerShell)
 git clone <repo-url>
 cd CTI
 ```
+
+### 3. Instalar Python e Ambiente Virtual
+
+#### Linux/macOS
+
+```bash
+sudo apt-get update
+sudo apt-get install python3 python3-pip python3-venv -y
+python3 -m venv venv
+source venv/bin/activate
+```
+
+#### Windows
+
+```cmd
+# Instale Python 3.8+ do site oficial: https://www.python.org/downloads/
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 4. Instalar Dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Instalar e Configurar Ollama
+
+Veja https://ollama.ai/download para baixar e instalar Ollama.
+
+```bash
+# Linux/macOS
+curl https://ollama.ai/install.sh | sh
+
+# Windows
+# Baixe o instalador .exe do site oficial e execute
+
+# Baixar modelo recomendado
+ollama pull mistral
+```
+
+### 6. Configurar Discord Webhook
+
+- Crie um webhook no Discord (Configurações → Integrações → Webhooks)
+- Copie a URL e adicione em `config.json`:
+
+```json
+"discord": {
+  "enabled": true,
+  "webhook_url": "https://discord.com/api/webhooks/SEU_WEBHOOK"
+}
+```
+
+---
+
+## Como Usar
+
+### 1. Iniciar Ollama
+
+```bash
+ollama serve
+```
+
+### 2. Executar o CTI System
+
+```bash
+# Linux/macOS
+source venv/bin/activate
+python main.py
+
+# Windows
+venv\Scripts\activate
+python main.py
+```
+
+- Para modo daemon (executa a cada 1h): `python main.py --daemon`
+- Para testar alerta Discord: `python main.py --test`
+
+### 3. Abrir o Dashboard
+
+```bash
+streamlit run dashboard.py
+```
+Acesse: http://localhost:8501
+
+---
+
+## Estrutura do Projeto
+
+```
+CTI/
+├── main.py           # Pipeline principal
+├── dashboard.py      # Dashboard web
+├── src/cti/          # Módulos internos
+├── data/             # Resultados e fontes
+├── config.json       # Configuração
+├── requirements.txt  # Dependências
+└── ...
+```
+
+---
+
+## Dicas e Suporte
+
+- Veja logs em tempo real: `tail -f logs/cti.log`
+- Erros comuns? Consulte a seção "Troubleshooting" no README completo.
+- Para Windows, use sempre `venv\Scripts\activate` e `python` (não `python3`).
+
+---
+
+## Licença
+
+MIT License — uso livre para fins pessoais e comerciais.
+
+---
+
+## Contato
+
+Dúvidas ou sugestões?  
+**Email:** cti@empresa.com  
+**Site:** https://cti-platform.com
+
+---
 
 ---
 
