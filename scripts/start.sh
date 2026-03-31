@@ -1,35 +1,35 @@
 #!/bin/bash
-# Launcher do CTI - sem interatividade
+# Launcher Node-only do CTI
+
+set -e
 
 cd /home/farias/Desktop/CTI
-source venv/bin/activate
 
-mkdir -p .streamlit logs data/results
+if [ ! -f "backend-node/package.json" ]; then
+	echo "Erro: backend-node/package.json nao encontrado"
+	exit 1
+fi
 
-cat > .streamlit/config.toml << 'EOF'
-[logger]
-level = "error"
+mkdir -p logs
 
-[client]
-showErrorDetails = false
+if [ -f ".cti_node_pid" ] && kill -0 "$(cat .cti_node_pid)" 2>/dev/null; then
+	echo "CTI Node ja esta rodando (PID: $(cat .cti_node_pid))"
+	echo "URL: http://localhost:8101"
+	exit 0
+fi
 
-[server]
-headless = false
-enableXsrfProtection = false
-enableCORS = true
-port = 8502
-EOF
+echo "Iniciando CTI Node..."
+nohup npm --prefix backend-node run start > logs/cti_node.log 2>&1 &
+NODE_PID=$!
+echo "$NODE_PID" > .cti_node_pid
 
-# Iniciar daemon
-echo "Iniciando daemon..."
-python main.py --daemon > logs/cti_daemon.log 2>&1 &
-DAEMON_PID=$!
-
-# Pequeno delay
-sleep 3
-
-# Iniciar dashboard sem prompt (echo vazio fornece resposta automática)
-echo ""
-echo "Dashboard iniciando na porta 8502..."
-echo ""
-echo | streamlit run dashboard.py --server.port 8502 --logger.level error
+sleep 2
+if kill -0 "$NODE_PID" 2>/dev/null; then
+	echo "CTI Node iniciado (PID: $NODE_PID)"
+	echo "URL: http://localhost:8101"
+	echo "Logs: logs/cti_node.log"
+else
+	echo "Falha ao iniciar CTI Node. Veja logs/cti_node.log"
+	rm -f .cti_node_pid
+	exit 1
+fi

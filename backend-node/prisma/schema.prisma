@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Source {
+  id            String    @id @default(cuid())
+  name          String
+  url           String    @unique
+  category      String
+  enabled       Boolean   @default(true)
+  maxEntries    Int       @default(50)
+  healthStatus  String    @default("unknown")
+  lastSuccessAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  rawItems      RawItem[]
+
+  @@index([enabled])
+}
+
+model FeedRun {
+  id           String   @id @default(cuid())
+  startedAt    DateTime @default(now())
+  finishedAt   DateTime?
+  status       String   @default("running")
+  forceRefresh Boolean  @default(false)
+  totalSources Int      @default(0)
+  okSources    Int      @default(0)
+  failedSources Int     @default(0)
+  newItems     Int      @default(0)
+  savedThreats Int      @default(0)
+  error        String?
+}
+
+model RawItem {
+  id          String   @id @default(cuid())
+  sourceId    String
+  source      Source   @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  guid        String?
+  title       String
+  link        String
+  summary     String?
+  publishedAt DateTime?
+  hash        String   @unique
+  rawJson     Json
+  createdAt   DateTime @default(now())
+
+  threat      Threat?
+
+  @@index([sourceId])
+  @@index([publishedAt])
+}
+
+model Threat {
+  id            String     @id @default(cuid())
+  rawItemId      String     @unique
+  rawItem        RawItem    @relation(fields: [rawItemId], references: [id], onDelete: Cascade)
+  severity       String     @default("baixa")
+  riskScore      Int        @default(20)
+  threatType     String     @default("unknown")
+  adversary      String?
+  capability     String?
+  infrastructure String?
+  victim         String?
+  summary        String?
+  createdAt      DateTime   @default(now())
+
+  threatIocs     ThreatIOC[]
+
+  @@index([createdAt])
+  @@index([severity])
+}
+
+model IOC {
+  id              String     @id @default(cuid())
+  type            String
+  value           String
+  normalizedValue String     @unique
+  firstSeenAt     DateTime   @default(now())
+
+  threatIocs      ThreatIOC[]
+
+  @@index([type])
+}
+
+model ThreatIOC {
+  id       String @id @default(cuid())
+  threatId String
+  iocId    String
+  threat   Threat @relation(fields: [threatId], references: [id], onDelete: Cascade)
+  ioc      IOC    @relation(fields: [iocId], references: [id], onDelete: Cascade)
+
+  @@unique([threatId, iocId])
+}

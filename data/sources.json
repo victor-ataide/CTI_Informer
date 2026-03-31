@@ -1,122 +1,186 @@
 [
   {
-    "name": "SANS Internet Storm Center",
-    "url": "https://isc.sans.edu/rssfeed.xml",
+    "name": "The Hacker News",
+    "url": "https://feeds.feedburner.com/TheHackersNews",
     "type": "rss",
     "category": "general",
     "enabled": true,
-    "description": "Centro de alerta de segurança da internet"
+    "description": "Notícias gerais de cibersegurança"
   },
   {
-    "name": "Bleeping Computer - Security News",
+    "name": "BleepingComputer",
     "url": "https://www.bleepingcomputer.com/feed/",
     "type": "rss",
     "category": "general",
     "enabled": true,
-    "description": "Notícias de segurança cibernética"
+    "description": "Incidentes, ransomware e vulnerabilidades"
   },
   {
     "name": "Krebs on Security",
     "url": "https://krebsonsecurity.com/feed/",
     "type": "rss",
-    "category": "investigative",
+    "category": "general",
     "enabled": true,
-    "description": "Investigação em profundidade de ataques cibernéticos"
+    "description": "Investigação de crime cibernético"
   },
   {
     "name": "Dark Reading",
-    "url": "https://www.darkreading.com/services/feeds/rss/all.asp",
+    "url": "https://www.darkreading.com/rss.xml",
     "type": "rss",
     "category": "general",
     "enabled": true,
-    "description": "Inteligência de segurança para empresas"
+    "description": "Cobertura empresarial e tendências"
   },
   {
-    "name": "Malwarebytes Labs",
-    "url": "https://www.malwarebytes.com/feed/",
+    "name": "SecurityWeek",
+    "url": "https://feeds.feedburner.com/securityweek",
     "type": "rss",
-    "category": "malware",
+    "category": "general",
     "enabled": true,
-    "description": "Pesquisa e análise de malware"
+    "description": "Notícias gerais e análises de mercado"
   },
   {
-    "name": "Checkpoint Research",
-    "url": "https://research.checkpoint.com/feed/",
+    "name": "Sophos",
+    "url": "https://news.sophos.com/en-us/feed/",
     "type": "rss",
     "category": "apt",
     "enabled": true,
-    "description": "Pesquisa de APTs e ameaças avançadas"
+    "description": "Threat intelligence da Sophos"
   },
   {
-    "name": "Mandiant Blog",
-    "url": "https://www.mandiant.com/resources/blog/rss.xml",
-    "type": "rss",
-    "category": "apt",
-    "enabled": true,
-    "description": "Análise de incidentes e APTs por Mandiant/Google"
-  },
-  {
-    "name": "CISA Alerts",
-    "url": "https://www.cisa.gov/news-events/cybersecurity-advisories/feed",
-    "type": "rss",
-    "category": "infrastructure",
-    "enabled": true,
-    "description": "Alertas de segurança de infraestrutura crítica (CISA)"
-  },
-  {
-    "name": "NVD CVE Feed",
-    "url": "https://services.nvd.nist.gov/rest/xml/cves/2.0/",
-    "type": "rss",
-    "category": "vulnerabilities",
-    "enabled": false,
-    "description": "Banco de dados de vulnerabilidades National Vulnerability Database"
-  },
-  {
-    "name": "ZDNet Security",
-    "url": "https://www.zdnet.com/topic/security/feed/",
-    "type": "rss",
-    "category": "general",
-    "enabled": true,
-    "description": "Notícias de segurança ZDNet"
-  },
-  {
-    "name": "Cisco Talos Intelligence",
-    "url": "https://feeds.talosintelligence.com/",
-    "type": "rss",
-    "category": "general",
-    "enabled": true,
-    "description": "Inteligência de ameaças Cisco Talos"
-  },
-  {
-    "name": "Recordedfuture Blog",
-    "url": "https://www.recordedfuture.com/feed/#/",
-    "type": "rss",
-    "category": "general",
-    "enabled": false,
-    "description": "Recordedfuture - Intelligence em tempo real"
-  },
-  {
-    "name": "Forum Infoguerre",
-    "url": "https://www.infoguerre.fr/feed",
-    "type": "rss",
-    "category": "geopolitical",
-    "enabled": true,
-    "description": "Análise brasileira de ciberguerra e inteligência"
-  },
-  {
-    "name": "SecurityTrails Blog",
-    "url": "https://blog.securitytrails.com/feed/",
-    "type": "rss",
-    "category": "infrastructure",
-    "enabled": true,
-    "description": "Análise de infraestrutura e DNS"
-  },
-  {
-    "name": "Unit42 Palo Alto Networks",
+    "name": "Palo Alto Unit 42",
     "url": "https://unit42.paloaltonetworks.com/feed/",
     "type": "rss",
     "category": "apt",
     "enabled": true,
-    "description": "Pesquisa de Unit42 - Palo Alto Networks"
+    "description": "Pesquisa de ameaças da Unit 42"
+  },
+  {
+    "name": "Cisco Talos",
+    "url": "https://blog.talosintelligence.com/feeds/posts/default",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Threat intelligence da Cisco Talos"
+  },
+  {
+    "name": "Trend Micro Research",
+    "url": "https://www.trendmicro.com/en_us/research/rss.xml",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Pesquisa de ameaças e malware"
+  },
+  {
+    "name": "Kaspersky Securelist",
+    "url": "https://securelist.com/feed/",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Relatórios técnicos e campanhas"
+  },
+  {
+    "name": "Rapid7 Blog",
+    "url": "https://blog.rapid7.com/rss/",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Pesquisa ofensiva e defensiva"
+  },
+  {
+    "name": "Microsoft Security Blog",
+    "url": "https://www.microsoft.com/security/blog/feed/",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Publicações oficiais de segurança Microsoft"
+  },
+  {
+    "name": "Malwarebytes Labs",
+    "url": "https://blog.malwarebytes.com/feed/",
+    "type": "rss",
+    "category": "malware",
+    "enabled": true,
+    "description": "Análise técnica de malware"
+  },
+  {
+    "name": "SANS ISC",
+    "url": "https://isc.sans.edu/rssfeed.xml",
+    "type": "rss",
+    "category": "malware",
+    "enabled": true,
+    "description": "Observações operacionais diárias"
+  },
+  {
+    "name": "Intezer Blog",
+    "url": "https://intezer.com/blog/feed/",
+    "type": "rss",
+    "category": "malware",
+    "enabled": true,
+    "description": "Pesquisa de malware e atribuição"
+  },
+  {
+    "name": "NIST NVD RSS",
+    "url": "https://nvd.nist.gov/feeds/xml/cve/misc/nvd-rss.xml",
+    "type": "rss",
+    "category": "vulnerabilities",
+    "enabled": true,
+    "description": "Feed de vulnerabilidades do NVD"
+  },
+  {
+    "name": "CVE Details",
+    "url": "https://www.cvedetails.com/vulnerability-feed.php",
+    "type": "rss",
+    "category": "vulnerabilities",
+    "enabled": true,
+    "description": "Vulnerabilidades recentes e score"
+  },
+  {
+    "name": "Exploit-DB",
+    "url": "https://www.exploit-db.com/rss.xml",
+    "type": "rss",
+    "category": "vulnerabilities",
+    "enabled": true,
+    "description": "Novos exploits publicados"
+  },
+  {
+    "name": "The DFIR Report",
+    "url": "https://thedfirreport.com/feed/",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Casos reais com TTPs detalhadas"
+  },
+  {
+    "name": "Mandiant",
+    "url": "https://www.mandiant.com/resources/rss.xml",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Inteligência de ameaças e incidentes"
+  },
+  {
+    "name": "Recorded Future Insights",
+    "url": "https://www.recordedfuture.com/feed/",
+    "type": "rss",
+    "category": "apt",
+    "enabled": true,
+    "description": "Análises e insights de threat intelligence"
+  },
+  {
+    "name": "CERT.br",
+    "url": "https://www.cert.br/rss/",
+    "type": "rss",
+    "category": "general",
+    "enabled": true,
+    "description": "Alertas e conteúdo em português"
+  },
+  {
+    "name": "Canaltech Segurança",
+    "url": "https://canaltech.com.br/seguranca/rss/",
+    "type": "rss",
+    "category": "general",
+    "enabled": true,
+    "description": "Notícias de segurança em português"
   }
 ]

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INTELCIBER</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <div class="logo-icon" aria-label="Coruja vetorial" role="img">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="owlGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00d4aa" />
+                <stop offset="100%" stop-color="#7c6bff" />
+              </linearGradient>
+            </defs>
+            <path d="M18 21 12 10l10 5M46 21l6-11-10 5" fill="url(#owlGrad)" />
+            <ellipse cx="32" cy="35" rx="21" ry="18" fill="url(#owlGrad)" />
+            <circle cx="24" cy="33" r="8" fill="#ffffff" />
+            <circle cx="40" cy="33" r="8" fill="#ffffff" />
+            <circle cx="24" cy="33" r="4" fill="#0f1117" />
+            <circle cx="40" cy="33" r="4" fill="#0f1117" />
+            <path d="M32 37 27 44h10z" fill="#ffb84d" />
+            <path d="M18 47c4 4 8 6 14 6s10-2 14-6" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div>
+          <div class="logo-text">INTELCIBER</div>
+          <div class="logo-sub">monitoramento contínuo de ameaças</div>
+        </div>
+      </div>
+      <div class="hdr-actions">
+        <input id="userInput" type="text" class="mini-input" placeholder="usuário" />
+        <input id="passInput" type="password" class="mini-input" placeholder="senha" />
+        <button id="loginBtn" class="btn">Login</button>
+        <button id="refreshThreatsBtn" class="btn btn-primary">Atualizar ameaças</button>
+        <button id="runPipelineBtn" class="btn">Executar pipeline</button>
+        <button id="exportCsvBtn" class="btn">Exportar CSV</button>
+        <button id="exportJsonBtn" class="btn">Exportar JSON</button>
+        <button id="themeToggleBtn" class="btn btn-primary">Tema</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="sb-section">
+          <div class="sb-label">Severidade</div>
+          <div class="sb-item active" data-filter-group="severity" data-filter-value="all">Todas <span class="sb-badge b" id="b-all">0</span></div>
+          <div class="sb-item" data-filter-group="severity" data-filter-value="critica">Críticas <span class="sb-badge" id="b-crit">0</span></div>
+          <div class="sb-item" data-filter-group="severity" data-filter-value="alta">Altas <span class="sb-badge w" id="b-hi">0</span></div>
+          <div class="sb-item" data-filter-group="severity" data-filter-value="media">Médias <span class="sb-badge w" id="b-med">0</span></div>
+          <div class="sb-item" data-filter-group="severity" data-filter-value="baixa">Baixas <span class="sb-badge g" id="b-low">0</span></div>
+          <div class="sb-item" data-filter-group="severity" data-filter-value="info">INFO <span class="sb-badge b" id="b-info">0</span></div>
+        </div>
+
+        <div class="sb-section">
+          <div class="sb-label">Fonte</div>
+          <div class="src-item active" data-filter-group="source" data-filter-value="all"><div class="dot" style="background:linear-gradient(135deg,var(--apura),var(--tempest))"></div>Todas</div>
+          <div id="sourceList"></div>
+        </div>
+
+        <div class="sb-section">
+          <div class="sb-label">Mapeamento Diamond</div>
+          <div class="sb-item" data-filter-group="analysis" data-filter-value="structured">Com mapeamento <span class="sb-badge g" id="b-cti">0</span></div>
+          <div class="sb-item" data-filter-group="analysis" data-filter-value="mitre">MITRE ATT&CK <span class="sb-badge b" id="b-mitre">0</span></div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="pg-hdr">
+          <div>
+            <div class="pg-title">Ocorrências de Ameaças Cibernéticas</div>
+            <div class="pg-sub" id="pg-sub">Atualização automática ativa</div>
+          </div>
+        </div>
+
+        <div class="view-tabs">
+          <button id="tabThreats" class="view-tab active">Ameaças</button>
+          <button id="tabIocs" class="view-tab">IOCs</button>
+        </div>
+
+        <section id="threatsView">
+
+        <div class="metrics">
+          <div class="metric"><div class="m-label">Total</div><div class="m-val" style="color:var(--info)" id="mt">0</div><div class="m-sub">ameaças</div></div>
+          <div class="metric"><div class="m-label">Crítico / Alto</div><div class="m-val" style="color:var(--danger)" id="mca">0</div><div class="m-sub">atenção imediata</div></div>
+          <div class="metric"><div class="m-label">Com IoCs</div><div class="m-val" style="color:var(--warn)" id="mioc">0</div><div class="m-sub">indicadores acionáveis</div></div>
+          <div class="metric"><div class="m-label">Com CVE</div><div class="m-val" style="color:var(--ok)" id="mcve">0</div><div class="m-sub">vulnerabilidades citadas</div></div>
+        </div>
+
+        <div class="filters">
+          <div class="search-wrap">
+            <span class="s-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="buscar por título, APT, malware, IOC..." />
+          </div>
+          <span class="f-label">Tipo:</span>
+          <select id="typeFilter">
+            <option value="all">Todos</option>
+            <option value="apt">APT</option>
+            <option value="ransomware">Ransomware</option>
+            <option value="phishing">Phishing</option>
+            <option value="exploracao">Exploração</option>
+          </select>
+          <span class="f-label">Ordenar:</span>
+          <select id="sortFilter">
+            <option value="date_desc">Mais recente</option>
+            <option value="date_asc">Mais antigo</option>
+            <option value="risk_desc">Maior risco</option>
+            <option value="severity">Severidade</option>
+          </select>
+          <button id="clearFiltersBtn" class="btn btn-danger" style="margin-left:auto">Limpar filtros</button>
+        </div>
+
+        <div class="tbl-wrap">
+          <div class="tbl-hdr">
+            <span class="tbl-title">Registros</span>
+            <span class="tbl-count" id="tbl-count">0 itens</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Sev.</th>
+                <th>Ameaça</th>
+                <th>Fonte</th>
+                <th>Tipo</th>
+                <th>APT / Campanha</th>
+                <th>Diamond</th>
+                <th>Detectado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        </section>
+
+        <section id="iocsView" class="hidden-view">
+          <div class="ioc-metrics" id="iocCounts"></div>
+          <div class="ioc-grid">
+            <div class="ioc-card">
+              <div class="ioc-title">IPs</div>
+              <div class="ioc-list" id="iocIps"></div>
+            </div>
+            <div class="ioc-card">
+              <div class="ioc-title">Domínios</div>
+              <div class="ioc-list" id="iocDomains"></div>
+            </div>
+            <div class="ioc-card">
+              <div class="ioc-title">URLs</div>
+              <div class="ioc-list" id="iocUrls"></div>
+            </div>
+            <div class="ioc-card">
+              <div class="ioc-title">Hashes</div>
+              <div class="ioc-list" id="iocHashes"></div>
+            </div>
+            <div class="ioc-card">
+              <div class="ioc-title">CVEs</div>
+              <div class="ioc-list" id="iocCves"></div>
+            </div>
+            <div class="ioc-card">
+              <div class="ioc-title">Emails</div>
+              <div class="ioc-list" id="iocEmails"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="overlay" id="detailOverlay" onclick="closeDetail(event)">
+      <div class="panel" id="detailPanel">
+        <button class="p-close" onclick="closeDetailBtn()">✕</button>
+        <div id="detailContent"></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"><span id="toastIcon"></span><span id="toastMsg"></span></div>
+    <footer id="statusBar" class="status">Carregando dados...</footer>
+
+    <script src="/assets/app.js"></script>
+  </body>
+</html>

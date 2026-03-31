@@ -1,0 +1,14 @@
+[
+  {
+    "id": "5e1e620c6d",
+    "name": "Critica Financeiro",
+    "enabled": true,
+    "conditions": {
+      "severity_equals": "crítica",
+      "sector_contains": "financeiro"
+    },
+    "actions": {
+      "priority": "P1"
+    }
+  }
+]

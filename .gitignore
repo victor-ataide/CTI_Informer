@@ -95,6 +95,8 @@ data/results/*.csv
 # Cache de coletas
 data/cache/
 *.cache
+data/.feed_state.json
+data/.ti_enrichment_cache.json
 
 # Cache de deduplicação (contém hashes de IoCs)
 data/.alert_cache.json

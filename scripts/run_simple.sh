@@ -1,60 +1,44 @@
 #!/bin/bash
-# CTI System - Gerenciador Simplificado
-# Funciona melhor que subprocess do Python
+# CTI Node - Gerenciador simplificado
 
 set -e
 
-PORT="${1:-8502}"
-KILL_ON_EXIT=true
+PORT="${1:-8101}"
 
 cd /home/farias/Desktop/CTI
-source venv/bin/activate
 
 echo ""
-echo "╔══════════════════════════════════════════════════════════╗"
-echo "║          🚨 CTI SYSTEM - Iniciando...  🚨               ║"
-echo "╚══════════════════════════════════════════════════════════╝"
+echo "========================================"
+echo "  CTI Node - Inicializacao simplificada"
+echo "========================================"
 echo ""
 
-# Função para trap (Ctrl+C)
+if [ ! -f "backend-node/package.json" ]; then
+    echo "Erro: backend-node/package.json nao encontrado"
+    exit 1
+fi
+
+mkdir -p logs
+
 cleanup() {
     echo ""
-    echo "🛑 Parando todos os processos..."
-    kill $DAEMON_PID 2>/dev/null || true
-    wait $DAEMON_PID 2>/dev/null || true
-    echo "✅ Finalizado"
+    echo "Parando CTI Node..."
+    if [ -n "$NODE_PID" ]; then
+        kill "$NODE_PID" 2>/dev/null || true
+        wait "$NODE_PID" 2>/dev/null || true
+    fi
+    echo "Finalizado"
     exit 0
 }
 
 trap cleanup SIGINT SIGTERM
 
-# Criar diretórios
-mkdir -p logs data/results
+echo "Iniciando CTI Node na porta $PORT..."
+PORT="$PORT" npm --prefix backend-node run start &
+NODE_PID=$!
 
-# Iniciar daemon em background
-echo "🚀 Iniciando CTI daemon (1 hora)..."
-nohup python main.py --daemon > logs/cti_daemon.log 2>&1 &
-DAEMON_PID=$!
-echo "✅ Daemon PID: $DAEMON_PID"
+echo "PID: $NODE_PID"
+echo "URL: http://localhost:$PORT"
+echo "Pressione Ctrl+C para encerrar"
 
-sleep 2
-
-# Iniciar dashboard
-echo ""
-echo "📊 Iniciando Dashboard na porta $PORT..."
-echo "🌐 Acesse: http://localhost:$PORT"
-echo ""
-echo "════════════════════════════════════════════════════════════"
-echo ""
-
-python3 -c "
-import streamlit as st
-print('Verificando 🚀')
-" || true
-
-streamlit run dashboard.py --server.port "$PORT" --logger.level=error
-
-echo ""
-echo "❌ Dashboard encerrado"
-
-cleanup
+wait "$NODE_PID"

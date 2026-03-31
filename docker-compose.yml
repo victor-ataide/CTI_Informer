@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: cti-postgres
+    environment:
+      POSTGRES_USER: cti
+      POSTGRES_PASSWORD: cti
+      POSTGRES_DB: cti_node
+    ports:
+      - "5432:5432"
+    volumes:
+      - cti_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  cti-node:
+    image: node:22-alpine
+    container_name: cti-node
+    working_dir: /app/backend-node
+    command: sh -c "npm install && npm run prisma:generate && npm run prisma:push && npm run start"
+    env_file:
+      - ./backend-node/.env
+    environment:
+      DATABASE_URL: postgresql://cti:cti@postgres:5432/cti?schema=cti_node
+      SOURCES_FILE: ../data/sources.json
+    depends_on:
+      - postgres
+    ports:
+      - "8101:8101"
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+volumes:
+  cti_postgres_data:
